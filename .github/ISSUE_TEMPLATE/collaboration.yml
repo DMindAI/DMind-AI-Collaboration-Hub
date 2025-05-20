@@ -37,4 +37,12 @@ body:
       label: Logo URL
       description: Direct URL to your project's logo (PNG/JPG, max 200x200px)
       placeholder: https://example.com/logo.png
-      required: true 
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## What's Next?
+        - Please wait patiently while we review your collaboration request
+        - We typically respond within 2-3 business days
+        - For urgent inquiries, contact us at [contact@dmind.ai](mailto:contact@dmind.ai)
+        - Visit our website: [dmind.ai](https://dmind.ai) 

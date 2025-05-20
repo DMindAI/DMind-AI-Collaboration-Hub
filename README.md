@@ -1,12 +1,14 @@
 # DMind AI Collaboration Hub
 
+A platform for managing and showcasing DMind's collaborations with innovative projects in the AI and Web3 space.
+
 ## About DMind
 
 **DMind** is an open-source AGI research organization focused on next-generation digital finance. Driven by real market needs, DMind continuously releases open-source products—including large language models, benchmarks, datasets, tools and more.
 
 As an open research-driven community, DMind is powered by a collective of AI and Web3 enthusiasts, builders, and researchers. We are currently open to new collaboration from projects.
 
-If your project want to collaborate with **DMind.ai**, please follow the instruction below.
+If your project want to collaborate with **DMind**, please follow the instruction below.
 
 ## How to Become a Collaborator
 
@@ -23,3 +25,12 @@ Your project will be reviewed and, if approved, automatically displayed on [dmin
 - Project URL
 - Short description
 - Logo URL (PNG/JPG, max 200x200px)
+
+
+## After Submission
+- Please wait patiently while we review your collaboration request
+- We typically respond within 1-2 business days
+- For urgent inquiries, contact us at [contact@dmind.ai](mailto:contact@dmind.ai)
+
+
+- Visit our website and see your logo there! [dmind.ai](https://dmind.ai)
