@@ -137,7 +137,9 @@ jobs:
             "name": "$PROJECT_NAME",
             "url": "$PROJECT_URL",
             "description": "$DESCRIPTION",
-            "logo": "${ISSUE_NUMBER}.${EXT}",
+             "logo": {
+              "url": "$LOGO_URL"
+            },
             "addedAt": "$ISSUE_CREATED_AT"
           }
           EOF
