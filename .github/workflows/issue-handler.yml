@@ -76,6 +76,10 @@ jobs:
           ISSUE_NUMBER="${{ github.event.issue.number }}"
           ISSUE_CREATED_AT="${{ github.event.issue.created_at }}"
 
+          # Create directories with proper permissions
+          mkdir -p collaborators/logos
+          chmod -R 755 collaborators
+
           BODY="$(jq -r .issue.body < $GITHUB_EVENT_PATH)"
           echo "ISSUE BODY:"
           echo "$BODY"
@@ -109,10 +113,21 @@ jobs:
             exit 1
           fi
 
-          mkdir -p collaborators/logos
+          # Download logo with verbose output
           EXT="${LOGO_URL##*.}"
-          curl -L -o "collaborators/logos/${ISSUE_NUMBER}.${EXT}" "$LOGO_URL"
-          if [ $? -ne 0 ]; then
+          echo "Downloading logo to: collaborators/logos/${ISSUE_NUMBER}.${EXT}"
+          curl -L -v -o "collaborators/logos/${ISSUE_NUMBER}.${EXT}" "$LOGO_URL"
+          DOWNLOAD_STATUS=$?
+          
+          # Verify file exists and has content
+          if [ -f "collaborators/logos/${ISSUE_NUMBER}.${EXT}" ]; then
+            echo "File downloaded successfully. Size: $(stat -f%z "collaborators/logos/${ISSUE_NUMBER}.${EXT}") bytes"
+          else
+            echo "Error: File not found after download attempt"
+            exit 1
+          fi
+
+          if [ $DOWNLOAD_STATUS -ne 0 ]; then
             echo "Error: Failed to download logo image"
             exit 1
           fi
