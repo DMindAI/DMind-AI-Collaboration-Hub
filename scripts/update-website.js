@@ -16,8 +16,13 @@ const collaborators = fs.readdirSync(collaboratorsDir)
   .map(file => {
     const data = JSON.parse(fs.readFileSync(path.join(collaboratorsDir, file)));
     
+    // Get logo filename from URL
+    const logoUrl = data.logo.url;
+    const logoExt = logoUrl.split('.').pop();
+    const logoFilename = `${path.basename(file, '.json')}.${logoExt}`;
+    
     // Validate logo
-    const logoPath = path.join(logosDir, data.logo);
+    const logoPath = path.join(logosDir, logoFilename);
     if (fs.existsSync(logoPath)) {
       const image = sharp(logoPath);
       image.metadata().then(metadata => {
@@ -34,7 +39,10 @@ const collaborators = fs.readdirSync(collaboratorsDir)
     
     return {
       ...data,
-      logo: `/collaborators/logos/${data.logo}`
+      logo: {
+        file: `/collaborators/logos/${logoFilename}`,
+        url: logoUrl
+      }
     };
   })
   .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
@@ -49,4 +57,4 @@ const websiteData = {
 fs.writeFileSync(
   path.join(__dirname, '../website-data.json'),
   JSON.stringify(websiteData, null, 2)
-); 
+);
