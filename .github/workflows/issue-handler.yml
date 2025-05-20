@@ -12,11 +12,18 @@ jobs:
       - name: Validate Issue
         run: |
           BODY="$(jq -r .issue.body < $GITHUB_EVENT_PATH)"
+          echo "ISSUE BODY:"
+          echo "$BODY"
 
-          PROJECT_NAME=$(echo "$BODY" | awk '/### Project Name/{getline; print}' | xargs)
-          PROJECT_URL=$(echo "$BODY" | awk '/### Project URL/{getline; print}' | xargs)
-          DESCRIPTION=$(echo "$BODY" | awk '/### Project Description/{getline; print}' | xargs)
-          LOGO_URL=$(echo "$BODY" | awk '/### Logo URL/{getline; print}' | xargs)
+          PROJECT_NAME=$(echo "$BODY" | awk 'tolower($0) ~ /project name/{getline; print}' | xargs)
+          PROJECT_URL=$(echo "$BODY" | awk 'tolower($0) ~ /project url/{getline; print}' | xargs)
+          DESCRIPTION=$(echo "$BODY" | awk 'tolower($0) ~ /project description/{getline; print}' | xargs)
+          LOGO_URL=$(echo "$BODY" | awk 'tolower($0) ~ /logo url/{getline; print}' | xargs)
+
+          echo "Extracted PROJECT_NAME: $PROJECT_NAME"
+          echo "Extracted PROJECT_URL: $PROJECT_URL"
+          echo "Extracted DESCRIPTION: $DESCRIPTION"
+          echo "Extracted LOGO_URL: $LOGO_URL"
 
           if [ -z "$PROJECT_NAME" ]; then
             echo "Error: Project name is required"
@@ -48,11 +55,18 @@ jobs:
       - name: Process Collaboration
         run: |
           BODY="$(jq -r .issue.body < $GITHUB_EVENT_PATH)"
+          echo "ISSUE BODY:"
+          echo "$BODY"
 
-          PROJECT_NAME=$(echo "$BODY" | awk '/### Project Name/{getline; print}' | xargs)
-          PROJECT_URL=$(echo "$BODY" | awk '/### Project URL/{getline; print}' | xargs)
-          DESCRIPTION=$(echo "$BODY" | awk '/### Project Description/{getline; print}' | xargs)
-          LOGO_URL=$(echo "$BODY" | awk '/### Logo URL/{getline; print}' | xargs)
+          PROJECT_NAME=$(echo "$BODY" | awk 'tolower($0) ~ /project name/{getline; print}' | xargs)
+          PROJECT_URL=$(echo "$BODY" | awk 'tolower($0) ~ /project url/{getline; print}' | xargs)
+          DESCRIPTION=$(echo "$BODY" | awk 'tolower($0) ~ /project description/{getline; print}' | xargs)
+          LOGO_URL=$(echo "$BODY" | awk 'tolower($0) ~ /logo url/{getline; print}' | xargs)
+
+          echo "Extracted PROJECT_NAME: $PROJECT_NAME"
+          echo "Extracted PROJECT_URL: $PROJECT_URL"
+          echo "Extracted DESCRIPTION: $DESCRIPTION"
+          echo "Extracted LOGO_URL: $LOGO_URL"
 
           mkdir -p collaborators/logos
 
