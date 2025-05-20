@@ -1,5 +1,9 @@
 name: Collaboration Handler
 
+permissions:
+  contents: write
+  issues: write
+
 on:
   issues:
     types: [opened, edited, labeled]
