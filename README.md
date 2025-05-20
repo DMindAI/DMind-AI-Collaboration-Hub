@@ -1,8 +1,17 @@
+<div align="center">
+  <img src="assets/figures/dmind-ai-logo.png" alt="DMind AI Logo" width="320" />
+</div>
+
+<br>
+<br>
+
 # DMind AI Collaboration Hub
 
 A platform for managing and showcasing DMind's collaborations with innovative projects in the AI and Web3 space.
 
+
 ## About DMind
+
 
 **DMind** is an open-source AGI research organization focused on next-generation digital finance. Driven by real market needs, DMind continuously releases open-source products—including large language models, benchmarks, datasets, tools and more.
 
