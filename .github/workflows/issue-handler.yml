@@ -15,10 +15,23 @@ jobs:
           echo "ISSUE BODY:"
           echo "$BODY"
 
-          PROJECT_NAME=$(echo "$BODY" | awk 'tolower($0) ~ /project name/{getline; print}' | xargs)
-          PROJECT_URL=$(echo "$BODY" | awk 'tolower($0) ~ /project url/{getline; print}' | xargs)
-          DESCRIPTION=$(echo "$BODY" | awk 'tolower($0) ~ /project description/{getline; print}' | xargs)
-          LOGO_URL=$(echo "$BODY" | awk 'tolower($0) ~ /logo url/{getline; print}' | xargs)
+          extract_field() {
+            local field="$1"
+            echo "$BODY" | awk -v key="$field" '
+              BEGIN {found=0}
+              tolower($0) ~ key {
+                found=1; next
+              }
+              found && NF {
+                print $0; exit
+              }
+            ' | xargs
+          }
+
+          PROJECT_NAME=$(extract_field "project name")
+          PROJECT_URL=$(extract_field "project url")
+          DESCRIPTION=$(extract_field "project description")
+          LOGO_URL=$(extract_field "logo url")
 
           echo "Extracted PROJECT_NAME: $PROJECT_NAME"
           echo "Extracted PROJECT_URL: $PROJECT_URL"
@@ -58,10 +71,23 @@ jobs:
           echo "ISSUE BODY:"
           echo "$BODY"
 
-          PROJECT_NAME=$(echo "$BODY" | awk 'tolower($0) ~ /project name/{getline; print}' | xargs)
-          PROJECT_URL=$(echo "$BODY" | awk 'tolower($0) ~ /project url/{getline; print}' | xargs)
-          DESCRIPTION=$(echo "$BODY" | awk 'tolower($0) ~ /project description/{getline; print}' | xargs)
-          LOGO_URL=$(echo "$BODY" | awk 'tolower($0) ~ /logo url/{getline; print}' | xargs)
+          extract_field() {
+            local field="$1"
+            echo "$BODY" | awk -v key="$field" '
+              BEGIN {found=0}
+              tolower($0) ~ key {
+                found=1; next
+              }
+              found && NF {
+                print $0; exit
+              }
+            ' | xargs
+          }
+
+          PROJECT_NAME=$(extract_field "project name")
+          PROJECT_URL=$(extract_field "project url")
+          DESCRIPTION=$(extract_field "project description")
+          LOGO_URL=$(extract_field "logo url")
 
           echo "Extracted PROJECT_NAME: $PROJECT_NAME"
           echo "Extracted PROJECT_URL: $PROJECT_URL"
