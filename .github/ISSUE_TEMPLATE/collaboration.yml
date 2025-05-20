@@ -1,0 +1,40 @@
+name: New Collaboration
+description: Collaborate with DMind.ai
+title: "[Collaboration] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in collaborating with DMind.ai!
+        
+        DMind is an open-source AGI research organization focused on next-generation digital finance. We welcome new collaborations to help build the future of AI-native innovations.
+        
+        Please provide the following information about your project:
+  - type: input
+    id: project-name
+    attributes:
+      label: Project Name
+      description: Your project's name (max 50 characters)
+      placeholder: My Awesome Project
+      required: true
+  - type: input
+    id: project-url
+    attributes:
+      label: Project URL
+      description: Your project's website or repository URL
+      placeholder: https://github.com/username/project
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Project Description
+      description: A brief description of your project and potential collaboration areas (max 200 characters)
+      placeholder: What does your project do and how would you like to collaborate with DMind?
+      required: true
+  - type: input
+    id: logo-url
+    attributes:
+      label: Logo URL
+      description: Direct URL to your project's logo (PNG/JPG, max 200x200px)
+      placeholder: https://example.com/logo.png
+      required: true 
