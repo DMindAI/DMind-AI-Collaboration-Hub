@@ -123,7 +123,7 @@ jobs:
             "addedAt": "$ISSUE_CREATED_AT",
             "featured": false
           }
-EOF
+          EOF
           )
           
           # Update collaborators.json
