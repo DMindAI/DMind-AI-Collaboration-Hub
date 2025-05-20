@@ -9,6 +9,16 @@
       },
       "addedAt": "2025-05-20T08:52:58Z",
       "featured": false
+    },
+    {
+      "name": "siv.ai",
+      "url": "https://google.com",
+      "description": "siv.ai",
+      "logo": {
+        "url": "https://pngimg.com/uploads/bitcoin/bitcoin_PNG47.png"
+      },
+      "addedAt": "2025-05-20T08:54:50Z",
+      "featured": false
     }
   ]
 }
