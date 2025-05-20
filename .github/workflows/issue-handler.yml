@@ -11,26 +11,33 @@ jobs:
     steps:
       - name: Validate Issue
         run: |
-          if [ -z "${{ github.event.issue.body.project-name }}" ]; then
+          BODY="$(jq -r .issue.body < $GITHUB_EVENT_PATH)"
+
+          PROJECT_NAME=$(echo "$BODY" | awk '/### Project Name/{getline; print}' | xargs)
+          PROJECT_URL=$(echo "$BODY" | awk '/### Project URL/{getline; print}' | xargs)
+          DESCRIPTION=$(echo "$BODY" | awk '/### Project Description/{getline; print}' | xargs)
+          LOGO_URL=$(echo "$BODY" | awk '/### Logo URL/{getline; print}' | xargs)
+
+          if [ -z "$PROJECT_NAME" ]; then
             echo "Error: Project name is required"
             exit 1
           fi
-          if [ -z "${{ github.event.issue.body.project-url }}" ]; then
+          if [ -z "$PROJECT_URL" ]; then
             echo "Error: Project URL is required"
             exit 1
           fi
-          if [ -z "${{ github.event.issue.body.description }}" ]; then
+          if [ -z "$DESCRIPTION" ]; then
             echo "Error: Description is required"
             exit 1
           fi
-          if [ -z "${{ github.event.issue.body.logo-url }}" ]; then
+          if [ -z "$LOGO_URL" ]; then
             echo "Error: Logo URL is required"
             exit 1
           fi
 
   process-approved:
     needs: validate-issue
-    if: github.event.issue.labels.*.name == 'approved'
+    if: contains(github.event.issue.labels.*.name, 'approved')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -40,27 +47,24 @@ jobs:
           node-version: '18'
       - name: Process Collaboration
         run: |
-          # Create directories if they don't exist
+          BODY="$(jq -r .issue.body < $GITHUB_EVENT_PATH)"
+
+          PROJECT_NAME=$(echo "$BODY" | awk '/### Project Name/{getline; print}' | xargs)
+          PROJECT_URL=$(echo "$BODY" | awk '/### Project URL/{getline; print}' | xargs)
+          DESCRIPTION=$(echo "$BODY" | awk '/### Project Description/{getline; print}' | xargs)
+          LOGO_URL=$(echo "$BODY" | awk '/### Logo URL/{getline; print}' | xargs)
+
           mkdir -p collaborators/logos
-          
-          # Download and validate logo
-          curl -o "collaborators/logos/${{ github.event.issue.number }}.png" "${{ github.event.issue.body.logo-url }}"
-          
-          # Create JSON
-          echo '{
-            "name": "${{ github.event.issue.body.project-name }}",
-            "url": "${{ github.event.issue.body.project-url }}",
-            "description": "${{ github.event.issue.body.description }}",
-            "logo": "${{ github.event.issue.number }}.png",
-            "addedAt": "${{ github.event.issue.created_at }}"
-          }' > "collaborators/${{ github.event.issue.number }}.json"
-          
-          # Update website
+
+          EXT="${LOGO_URL##*.}"
+          curl -L -o "collaborators/logos/${{ github.event.issue.number }}.${EXT}" "$LOGO_URL"
+
+          echo "{\n  \"name\": \"$PROJECT_NAME\",\n  \"url\": \"$PROJECT_URL\",\n  \"description\": \"$DESCRIPTION\",\n  \"logo\": \"${{ github.event.issue.number }}.${EXT}\",\n  \"addedAt\": \"${{ github.event.issue.created_at }}\"\n}" > "collaborators/${{ github.event.issue.number }}.json"
+
           node scripts/update-website.js
-          
-          # Commit and push changes
+
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add .
-          git commit -m "Add collaborator: ${{ github.event.issue.body.project-name }}"
+          git commit -m "Add collaborator: $PROJECT_NAME"
           git push 
