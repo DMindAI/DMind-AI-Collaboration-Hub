@@ -132,17 +132,32 @@ jobs:
             exit 1
           fi
 
-          cat > "collaborators/${ISSUE_NUMBER}.json" <<EOF
+          # Create or update collaborators.json
+          COLLABORATORS_FILE="collaborators/collaborators.json"
+          
+          # Initialize file if it doesn't exist
+          if [ ! -f "$COLLABORATORS_FILE" ]; then
+            echo '{"collaborators": []}' > "$COLLABORATORS_FILE"
+          fi
+          
+          # Add new collaborator
+          NEW_COLLABORATOR=$(cat <<EOF
           {
             "name": "$PROJECT_NAME",
             "url": "$PROJECT_URL",
             "description": "$DESCRIPTION",
-             "logo": {
+            "logo": {
               "url": "$LOGO_URL"
             },
-            "addedAt": "$ISSUE_CREATED_AT"
+            "addedAt": "$ISSUE_CREATED_AT",
+            "featured": false
           }
-          EOF
+EOF
+          )
+          
+          # Update collaborators.json
+          jq --argjson new "$NEW_COLLABORATOR" '.collaborators += [$new]' "$COLLABORATORS_FILE" > "${COLLABORATORS_FILE}.tmp"
+          mv "${COLLABORATORS_FILE}.tmp" "$COLLABORATORS_FILE"
 
           node scripts/update-website.js
 

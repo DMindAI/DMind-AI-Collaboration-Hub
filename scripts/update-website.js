@@ -2,50 +2,45 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-// Read all collaborator files
-const collaboratorsDir = path.join(__dirname, '../collaborators');
+// Read collaborators file
+const collaboratorsFile = path.join(__dirname, '../collaborators/collaborators.json');
 const logosDir = path.join(__dirname, '../collaborators/logos');
 
 // Ensure directories exist
-if (!fs.existsSync(collaboratorsDir)) fs.mkdirSync(collaboratorsDir, { recursive: true });
 if (!fs.existsSync(logosDir)) fs.mkdirSync(logosDir, { recursive: true });
 
-// Process collaborators
-const collaborators = fs.readdirSync(collaboratorsDir)
-  .filter(file => file.endsWith('.json') && file !== '_template.json')
-  .map(file => {
-    const data = JSON.parse(fs.readFileSync(path.join(collaboratorsDir, file)));
-    
-    // Get logo filename from URL
-    const logoUrl = data.logo.url;
-    const logoExt = logoUrl.split('.').pop();
-    const logoFilename = `${path.basename(file, '.json')}.${logoExt}`;
-    
-    // Validate logo
-    const logoPath = path.join(logosDir, logoFilename);
-    if (fs.existsSync(logoPath)) {
-      const image = sharp(logoPath);
-      image.metadata().then(metadata => {
-        if (metadata.width > 200 || metadata.height > 200) {
-          image
-            .resize(200, 200, { fit: 'inside' })
-            .toFile(logoPath + '.resized')
-            .then(() => {
-              fs.renameSync(logoPath + '.resized', logoPath);
-            });
-        }
-      });
-    }
-    
-    return {
-      ...data,
-      logo: {
-        file: `/collaborators/logos/${logoFilename}`,
-        url: logoUrl
+// Read and process collaborators
+const data = JSON.parse(fs.readFileSync(collaboratorsFile));
+const collaborators = data.collaborators.map(collaborator => {
+  // Get logo filename from URL
+  const logoUrl = collaborator.logo.url;
+  const logoExt = logoUrl.split('.').pop();
+  const logoFilename = `${collaborator.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.${logoExt}`;
+  
+  // Validate logo
+  const logoPath = path.join(logosDir, logoFilename);
+  if (fs.existsSync(logoPath)) {
+    const image = sharp(logoPath);
+    image.metadata().then(metadata => {
+      if (metadata.width > 200 || metadata.height > 200) {
+        image
+          .resize(200, 200, { fit: 'inside' })
+          .toFile(logoPath + '.resized')
+          .then(() => {
+            fs.renameSync(logoPath + '.resized', logoPath);
+          });
       }
-    };
-  })
-  .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+    });
+  }
+  
+  return {
+    ...collaborator,
+    logo: {
+      file: `/collaborators/logos/${logoFilename}`,
+      url: logoUrl
+    }
+  };
+}).sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
 
 // Update website data
 const websiteData = {
