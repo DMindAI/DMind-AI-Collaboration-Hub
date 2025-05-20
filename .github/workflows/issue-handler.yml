@@ -113,15 +113,15 @@ jobs:
             exit 1
           fi
 
-cat > "collaborators/${ISSUE_NUMBER}.json" <<EOF
-{
-  "name": "$PROJECT_NAME",
-  "url": "$PROJECT_URL",
-  "description": "$DESCRIPTION",
-  "logo": "${ISSUE_NUMBER}.${EXT}",
-  "addedAt": "$ISSUE_CREATED_AT"
-}
-EOF
+          cat > "collaborators/${ISSUE_NUMBER}.json" <<EOF
+          {
+            "name": "$PROJECT_NAME",
+            "url": "$PROJECT_URL",
+            "description": "$DESCRIPTION",
+            "logo": "${ISSUE_NUMBER}.${EXT}",
+            "addedAt": "$ISSUE_CREATED_AT"
+          }
+          EOF
 
           node scripts/update-website.js
 
