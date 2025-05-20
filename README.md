@@ -7,7 +7,7 @@
 
 # DMind AI Collaboration Hub
 
-A platform for managing and showcasing projects using DMind's technology.
+A platform for managing and showcasing projects using DMind's open-source products.
 
 
 ## About DMind
@@ -19,7 +19,7 @@ As an open research-driven community, DMind is powered by a collective of AI and
 
 ## How to Get Listed
 
-Want your project listed under "Projects Using DMind"? Follow these steps:
+Want your project listed on Dmind's website? Follow these steps:
 
 1. Go to [Issues](https://github.com/dmind-ai/DMind-AI-Collaboration-Hub/issues)
 2. Click "New Issue"
@@ -32,7 +32,7 @@ Your project will be reviewed and, if approved, automatically displayed on [dmin
 ## Requirements
 - Project name
 - Project URL
-- Short description of how you use DMind
+- Short description
 - Logo URL (PNG/JPG, max 200x200px)
 
 
