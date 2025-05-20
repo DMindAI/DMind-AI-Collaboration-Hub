@@ -97,11 +97,10 @@ jobs:
           echo "Extracted LOGO_URL: $LOGO_URL"
 
           mkdir -p collaborators/logos
-
           EXT="${LOGO_URL##*.}"
           curl -L -o "collaborators/logos/${{ github.event.issue.number }}.${EXT}" "$LOGO_URL"
 
-          cat > "collaborators/${{ github.event.issue.number }}.json" <<EOF
+cat > "collaborators/${{ github.event.issue.number }}.json" <<EOF
 {
   "name": "$PROJECT_NAME",
   "url": "$PROJECT_URL",
