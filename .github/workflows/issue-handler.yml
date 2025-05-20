@@ -65,6 +65,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+      - name: Install dependencies
+        run: npm install
       - name: Process Collaboration
         run: |
           BODY="$(jq -r .issue.body < $GITHUB_EVENT_PATH)"
