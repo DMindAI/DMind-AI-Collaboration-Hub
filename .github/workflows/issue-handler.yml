@@ -101,7 +101,15 @@ jobs:
           EXT="${LOGO_URL##*.}"
           curl -L -o "collaborators/logos/${{ github.event.issue.number }}.${EXT}" "$LOGO_URL"
 
-          echo "{\n  \"name\": \"$PROJECT_NAME\",\n  \"url\": \"$PROJECT_URL\",\n  \"description\": \"$DESCRIPTION\",\n  \"logo\": \"${{ github.event.issue.number }}.${EXT}\",\n  \"addedAt\": \"${{ github.event.issue.created_at }}\"\n}" > "collaborators/${{ github.event.issue.number }}.json"
+          cat > "collaborators/${{ github.event.issue.number }}.json" <<EOF
+{
+  "name": "$PROJECT_NAME",
+  "url": "$PROJECT_URL",
+  "description": "$DESCRIPTION",
+  "logo": "${{ github.event.issue.number }}.${EXT}",
+  "addedAt": "${{ github.event.issue.created_at }}"
+}
+EOF
 
           node scripts/update-website.js
 
