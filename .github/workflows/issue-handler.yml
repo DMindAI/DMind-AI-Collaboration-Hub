@@ -69,6 +69,9 @@ jobs:
         run: npm install
       - name: Process Collaboration
         run: |
+          ISSUE_NUMBER="${{ github.event.issue.number }}"
+          ISSUE_CREATED_AT="${{ github.event.issue.created_at }}"
+
           BODY="$(jq -r .issue.body < $GITHUB_EVENT_PATH)"
           echo "ISSUE BODY:"
           echo "$BODY"
@@ -96,17 +99,27 @@ jobs:
           echo "Extracted DESCRIPTION: $DESCRIPTION"
           echo "Extracted LOGO_URL: $LOGO_URL"
 
+          # Validate logo URL
+          if ! echo "$LOGO_URL" | grep -E -q '^https?://.*\.(png|jpg|jpeg|svg)$'; then
+            echo "Error: Logo URL must be a valid image URL (png, jpg, jpeg, svg)"
+            exit 1
+          fi
+
           mkdir -p collaborators/logos
           EXT="${LOGO_URL##*.}"
-          curl -L -o "collaborators/logos/${{ github.event.issue.number }}.${EXT}" "$LOGO_URL"
+          curl -L -o "collaborators/logos/${ISSUE_NUMBER}.${EXT}" "$LOGO_URL"
+          if [ $? -ne 0 ]; then
+            echo "Error: Failed to download logo image"
+            exit 1
+          fi
 
-cat > "collaborators/${{ github.event.issue.number }}.json" <<EOF
+cat > "collaborators/${ISSUE_NUMBER}.json" <<EOF
 {
   "name": "$PROJECT_NAME",
   "url": "$PROJECT_URL",
   "description": "$DESCRIPTION",
-  "logo": "${{ github.event.issue.number }}.${EXT}",
-  "addedAt": "${{ github.event.issue.created_at }}"
+  "logo": "${ISSUE_NUMBER}.${EXT}",
+  "addedAt": "$ISSUE_CREATED_AT"
 }
 EOF
 
